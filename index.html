@@ -1,120 +1,113 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Crazy Canvas</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<head>
+		<title>Crazy Canvas</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-        <style>
-            canvas {
-                border: 1px solid black
-            }
-        </style>
-        
-        <script src="dancer.js"></script>
-        <script src="figures.js"></script>
+		<style>
+			canvas {
+				border: 1px solid black
+			}
+		</style>
 
-        <script>
+		<script src="loadImages.js"></script>
+		<script src="dancer.js"></script>
+		<script src="figures.js"></script>
 
-            var figureOf8 = new Array();
-            figureOf8[0] = {x: 0, y: 0};
-            figureOf8[1] = {x: 1, y: -1};
-            figureOf8[2] = {x: 2, y: 0};
-            figureOf8[3] = {x: 3, y: 1};
-            figureOf8[4] = {x: 4, y: 0};
-            figureOf8[5] = {x: 3, y: -1};
-            figureOf8[6] = {x: 2, y: 0};
-            figureOf8[7] = {x: 1, y: 1};
-            figureOf8[8] = {x: 0, y: 0};
-            
-            figureOf8 = new figureOfEight();
+		<script>
+			// floor size
+			var floorWidth;
+			var floorHeight;
+			var xPixels;
+			var yPixels;
 
+			var barTime = 2000;
+			//one bar takes 5 seconds
+			var bar = 1;
+			var time = 0;
+			var interval = 100;
+			var steps = barTime / interval;
 
-            var x, y, previousX, previousY;
-            var offset = {x: 275, y: 125};
-            var firstLadyX = 275;
-            var firstLadyY = 125;
-            var barTime = 2000; //one bar takes 5 seconds
-            var bar = 1;
-            var time = 0;
-            var interval = 100;
-            var steps = barTime / interval;
+			function init() {
 
-            var imageLoaded = false;
-            var dancer = new Image();
-            dancer.onload = function() {
-                //context.drawImage(dancer, 69, 50);
-                imageLoaded = true;
-            };
-            dancer.src = "images/dancer.png";
+				danceFloor = document.getElementById('danceFloor');
+				floorWidth = danceFloor.width;
+				floorHeight = danceFloor.height;
 
-            function init() {
-                context = document.getElementById('myFirstCanvas').getContext('2d');
-                context.fillStyle = "blue";
-                context.fillRect(50, 200, 10, 10);
-                context.fillRect(350, 200, 10, 10);
-                context.fillRect(200, 200, 10, 10);
-                context.fillRect(125, 125, 10, 10);
-                context.fillRect(125, 275, 10, 10);
-                context.fillRect(275, 125, 10, 10);
-                context.fillRect(275, 275, 10, 10);
-                heartBeat();
-            }
-            function heartBeat() {
-                time = time + interval;
-                if ((time % barTime) === 0) {
-                    bar = bar + 1;
-                }
-                draw();
-                setTimeout(function() {
-                    heartBeat();
-                },
-                        interval);
-            }
-            function draw() {
-                // clear the original
-                context.fillStyle = "white";
-                context.fillRect(firstLadyX-32, firstLadyY-32, 64, 64);
-                context.fillStyle = "blue";
-                context.fillRect(125, 200, 10, 10);
-               context.fillRect(275, 200, 10, 10);
+				context = danceFloor.getContext('2d');
+				drawSet();
+				//heartBeat();
+			}
 
-                var barEndsTime = bar * barTime;
-                var timeLeft = barEndsTime - time;
-                var numberOfMoves = timeLeft / interval;
+			function drawSet() {
+				xPixels = Math.floor(floorWidth / grid.x);
+				yPixels = Math.floor(floorHeight / grid.y);
+				for (var i = 0; i < dancers.length; i++) {
+					context.drawImage(dancers[i].image, dancers[i].startingPosition.x * xPixels, dancers[i].startingPosition.y * yPixels);
+				}
 
-                //var destX = figureOf8[bar % 8].x;
-                //var destY = figureOf8[bar % 8].y;
-                
-                var destX = figureOf8.whereShouldIBe("firstLady", bar%8).x;
-                var destY = figureOf8.whereShouldIBe("firstLady", bar%8).y;
-                
-                var distanceLeft = {vectX: (destX * 50)+ offset.x - firstLadyX, vectY: (destY * 50)+ offset.y - firstLadyY};
-                firstLadyX = firstLadyX + (distanceLeft.vectX /numberOfMoves);
-                firstLadyY = firstLadyY + (distanceLeft.vectY /numberOfMoves);
+			}
 
-                context.drawImage(dancer, firstLadyX-32, firstLadyY-32);
-                document.getElementById("bar").innerHTML = "Bar: " + bar + " Time: " + time/1000 + " seconds";
-            }
-            function updateXY(event) {
-                if (imageLoaded) {
-                    previousX = x;
-                    previousY = y;
-                    x = event.clientX;
-                    y = event.clientY;
-                    context.fillStyle = "white";
-                    context.fillRect(previousX - 40, previousY - 40, 64, 64);
-                    context.fillStyle = "black";
-                    context.fillRect(previousX + 5, previousY + 5, 1, 1);
-                    context.drawImage(dancer, x - 40, y - 40);
-                }
-            }
-        </script>    
-    </head>
-    <body onLoad="init();">
-        <div style="cursor: none">
-            <canvas id="myFirstCanvas" width="400" height="400" onmousemove="updateXY(event)"></canvas>
-        </div>
-        <div  id="bar">            
-        </div>
-    </body>
+			function heartBeat() {
+				time = time + interval;
+				if ((time % barTime) === 0) {
+					bar = bar + 1;
+				}
+				draw();
+				setTimeout(function() {
+					heartBeat();
+				}, interval);
+			}
+
+			function draw() {
+				// clear the original
+				context.fillStyle = "white";
+				context.fillRect(firstLadyX - 32, firstLadyY - 32, 64, 64);
+				context.fillStyle = "blue";
+				context.fillRect(125, 200, 10, 10);
+				context.fillRect(275, 200, 10, 10);
+
+				var barEndsTime = bar * barTime;
+				var timeLeft = barEndsTime - time;
+				var numberOfMoves = timeLeft / interval;
+
+				var destX = figureOf8[bar % 8].x;
+				var destY = figureOf8[bar % 8].y;
+
+				//var destX = figureOf8.whereShouldIBe("firstLady", bar%8).x;
+				//var destY = figureOf8.whereShouldIBe("firstLady", bar%8).y;
+
+				var distanceLeft = {
+					vectX : (destX * 75) + offset.x - firstLadyX,
+					vectY : (destY * 75) + offset.y - firstLadyY
+				};
+				firstLadyX = firstLadyX + (distanceLeft.vectX / numberOfMoves);
+				firstLadyY = firstLadyY + (distanceLeft.vectY / numberOfMoves);
+
+				context.drawImage(dancer, firstLadyX - 32, firstLadyY - 32);
+				document.getElementById("bar").innerHTML = "Bar: " + bar + " Time: " + time / 1000 + " seconds";
+			}
+
+			function updateXY(event) {
+				if (imageManLoaded && imageLadyLoaded) {
+					previousX = x;
+					previousY = y;
+					x = event.clientX;
+					y = event.clientY;
+					context.fillStyle = "white";
+					context.fillRect(previousX - 40, previousY - 40, 64, 64);
+					context.fillStyle = "black";
+					context.fillRect(previousX + 5, previousY + 5, 1, 1);
+					context.drawImage(dancer, x - 40, y - 40);
+				}
+			}
+		</script>
+	</head>
+
+	<body onLoad="init();">
+		<div>
+			<canvas id="danceFloor" width="400" height="600" onmousemove="updateXY(event)"></canvas>
+		</div>
+		<div  id="bar"></div>
+	</body>
 </html>
