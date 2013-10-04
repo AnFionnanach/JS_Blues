@@ -11,7 +11,7 @@
 		</style>
 
 		<script src="loadImages.js"></script>
-		<script src="dancer.js"></script>
+		<script src="dancers.js"></script>
 		<script src="figures.js"></script>
 
 		<script>
@@ -27,6 +27,8 @@
 			var time = 0;
 			var interval = 100;
 			var steps = barTime / interval;
+			
+			var figureOf8 = new figureOfEight();
 
 			function init() {
 
@@ -36,14 +38,16 @@
 
 				context = danceFloor.getContext('2d');
 				drawSet();
-				//heartBeat();
+				heartBeat();
 			}
 
 			function drawSet() {
 				xPixels = Math.floor(floorWidth / grid.x);
 				yPixels = Math.floor(floorHeight / grid.y);
 				for (var i = 0; i < dancers.length; i++) {
-					context.drawImage(dancers[i].image, dancers[i].startingPosition.x * xPixels, dancers[i].startingPosition.y * yPixels);
+					dancers[i].pixelPosition.x = dancers[i].startingPosition.x * xPixels - 32;
+					dancers[i].pixelPosition.y = dancers[i].startingPosition.y * yPixels - 32;
+					context.drawImage(dancers[i].image, dancers[i].pixelPosition.x, dancers[i].pixelPosition.y);
 				}
 
 			}
@@ -60,53 +64,49 @@
 			}
 
 			function draw() {
-				// clear the original
-				context.fillStyle = "white";
-				context.fillRect(firstLadyX - 32, firstLadyY - 32, 64, 64);
-				context.fillStyle = "blue";
-				context.fillRect(125, 200, 10, 10);
-				context.fillRect(275, 200, 10, 10);
 
+				// music and timing
 				var barEndsTime = bar * barTime;
 				var timeLeft = barEndsTime - time;
 				var numberOfMoves = timeLeft / interval;
 
-				var destX = figureOf8[bar % 8].x;
-				var destY = figureOf8[bar % 8].y;
+				// redraw each of the dancers
+				xPixels = Math.floor(floorWidth / grid.x);
+				yPixels = Math.floor(floorHeight / grid.y);
+				for (var i = 0; i < dancers.length; i++) {
 
-				//var destX = figureOf8.whereShouldIBe("firstLady", bar%8).x;
-				//var destY = figureOf8.whereShouldIBe("firstLady", bar%8).y;
+					// clear the original
+					context.fillStyle = "white";
+					context.fillRect(dancers[i].pixelPosition.x, dancers[i].pixelPosition.y, 64, 64);
+					
+					var offset = {
+						x: dancers[i].startingPosition.x * xPixels - 32 ,
+						y: dancers[i].startingPosition.y * yPixels - 32
+					};
 
-				var distanceLeft = {
-					vectX : (destX * 75) + offset.x - firstLadyX,
-					vectY : (destY * 75) + offset.y - firstLadyY
-				};
-				firstLadyX = firstLadyX + (distanceLeft.vectX / numberOfMoves);
-				firstLadyY = firstLadyY + (distanceLeft.vectY / numberOfMoves);
+					// relative (to the starting position) new position
+					var destX = figureOf8.whereShouldIBe(dancers[i].role, bar % 8).x;
+					var destY = figureOf8.whereShouldIBe(dancers[i].role, bar % 8).y;
 
-				context.drawImage(dancer, firstLadyX - 32, firstLadyY - 32);
+					var distanceLeft = {
+						vectX : (destX * xPixels) + offset.x - dancers[i].pixelPosition.x,
+						vectY : (destY * yPixels) + offset.y - dancers[i].pixelPosition.y
+					};
+					
+					dancers[i].pixelPosition.x = dancers[i].pixelPosition.x + (distanceLeft.vectX / numberOfMoves);
+					dancers[i].pixelPosition.y = dancers[i].pixelPosition.y + (distanceLeft.vectY / numberOfMoves);
+					context.drawImage(dancers[i].image, dancers[i].pixelPosition.x, dancers[i].pixelPosition.y);
+				}
+
 				document.getElementById("bar").innerHTML = "Bar: " + bar + " Time: " + time / 1000 + " seconds";
 			}
 
-			function updateXY(event) {
-				if (imageManLoaded && imageLadyLoaded) {
-					previousX = x;
-					previousY = y;
-					x = event.clientX;
-					y = event.clientY;
-					context.fillStyle = "white";
-					context.fillRect(previousX - 40, previousY - 40, 64, 64);
-					context.fillStyle = "black";
-					context.fillRect(previousX + 5, previousY + 5, 1, 1);
-					context.drawImage(dancer, x - 40, y - 40);
-				}
-			}
 		</script>
 	</head>
 
 	<body onLoad="init();">
 		<div>
-			<canvas id="danceFloor" width="400" height="600" onmousemove="updateXY(event)"></canvas>
+			<canvas id="danceFloor" width="400" height="600"></canvas>
 		</div>
 		<div  id="bar"></div>
 	</body>

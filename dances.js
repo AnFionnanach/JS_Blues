@@ -10,3 +10,5 @@ function basicDance() {
 				fourthMan: {},
 				fourthLady: {}};
 }
+
+var figureOf8 = new figureOfEight();

@@ -4,54 +4,54 @@ var gender = {
 };
 
 var roles = {
-	'firstMan' : 1,
-	'firstLady' : 2,
-	'secondMan' : 3,
-	'secondLady' : 4,
-	'thirdMan' : 5,
-	'thirdLady' : 6,
-	'fourthMan' : 7,
-	'fourthLady' : 8
+	'firstMan' : 0,
+	'firstLady' : 1,
+	'secondMan' : 2,
+	'secondLady' : 3,
+	'thirdMan' : 4,
+	'thirdLady' : 5,
+	'fourthMan' : 6,
+	'fourthLady' : 7
 };
 
 var relativePositions = {
 	'firstMan' : {
 		x : 4,
-		y : 4
+		y : 2
 	},
 	'firstLady' : {
 		x : 8,
-		y : 4
+		y : 2
 	},
 	'secondMan' : {
 		x : 4,
-		y : 6
+		y : 4
 	},
 	'secondLady' : {
 		x : 8,
-		y : 6
+		y : 4
 	},
 	'thirdMan' : {
 		x : 4,
-		y : 8
+		y : 6
 	},
 	'thirdLady' : {
 		x : 8,
-		y : 8
+		y : 6
 	},
 	'fourthMan' : {
 		x : 4,
-		y : 10
+		y : 8
 	},
 	'fourthLady' : {
 		x : 8,
-		y : 10
+		y : 8
 	}
 };
 
 var grid = {
 	x : 10,
-	y : 20
+	y : 10
 };
 
 function fullName(given, nick, family) {
@@ -72,7 +72,7 @@ function dancer() {
 		x : 0,
 		y : 0
 	};
-	this.currentPosition = {
+	this.pixelPosition = {
 		x : 0,
 		y : 0
 	};
@@ -80,7 +80,7 @@ function dancer() {
 		x : 0,
 		y : 0
 	};
-	this.absoluteDestination = {
+	this.pixelDestination = {
 		x : 0,
 		y : 0
 	};
@@ -91,48 +91,48 @@ var firstMan = new dancer();
 firstMan.role = roles['firstMan'];
 firstMan.gender = gender.male;
 firstMan.image = dancerMan;
-firstMan.startingPosition = relativePositions['firstMan'];
+firstMan.startingPosition = firstMan.currentPosition = relativePositions['firstMan'];
 
 var firstLady = new dancer();
 firstLady.role = roles['firstLady'];
 firstLady.gender = gender.female;
 firstLady.image = dancerLady;
-firstLady.startingPosition = relativePositions['firstLady'];
+firstLady.startingPosition = firstLady.currentPosition = relativePositions['firstLady'];
 
 var secondMan = new dancer();
 secondMan.role = roles['secondMan'];
 secondMan.gender = gender.male;
 secondMan.image = dancerMan;
-secondMan.startingPosition = relativePositions['secondMan'];
+secondMan.startingPosition = secondMan.currentPosition = relativePositions['secondMan'];
 
 var secondLady = new dancer();
 secondLady.role = roles['secondLady'];
 secondLady.gender = gender.female;
 secondLady.image = dancerLady;
-secondLady.startingPosition = relativePositions['secondLady'];
+secondLady.startingPosition = secondLady.currentPosition = relativePositions['secondLady'];
 
 var thirdMan = new dancer();
 thirdMan.role = roles['thirdMan'];
 thirdMan.gender = gender.male;
 thirdMan.image = dancerMan;
-thirdMan.startingPosition = relativePositions['thirdMan'];
+thirdMan.startingPosition = thirdMan.currentPosition = relativePositions['thirdMan'];
 
 var thirdLady = new dancer();
 thirdLady.role = roles['thirdLady'];
 thirdLady.gender = gender.female;
 thirdLady.image = dancerLady;
-thirdLady.startingPosition = relativePositions['thirdLady'];
+thirdLady.startingPosition = thirdLady.currentPosition = relativePositions['thirdLady'];
 
 var fourthMan = new dancer();
 fourthMan.role = roles['fourthMan'];
 fourthMan.gender = gender.male;
 fourthMan.image = dancerMan;
-fourthMan.startingPosition = relativePositions['fourthMan'];
+fourthMan.startingPosition = fourthMan.currentPosition = relativePositions['fourthMan'];
 
 var fourthLady = new dancer();
 fourthLady.role = roles['fourthLady'];
 fourthLady.gender = gender.female;
 fourthLady.image = dancerLady;
-fourthLady.startingPosition = relativePositions['fourthLady'];
+fourthLady.startingPosition = fourthLady.currentPosition = relativePositions['fourthLady'];
 
 var dancers = [firstMan, firstLady, secondMan, secondLady, thirdMan, thirdLady, fourthMan, fourthLady];
