@@ -9,10 +9,12 @@
 				border: 1px solid black
 			}
 		</style>
-
+		
+		<script src="imagePreloader.js"></script>
 		<script src="loadImages.js"></script>
 		<script src="dancers.js"></script>
-		<script src="figures.js"></script>
+		<script src="figureOfEight.js"></script>
+		<script src="rightsAndLefts.js"></script>
 
 		<script>
 			// floor size
@@ -27,7 +29,7 @@
 			var time = 0;
 			var interval = 100;
 			var steps = barTime / interval;
-			
+
 			var figureOf8 = new figureOfEight();
 
 			function init() {
@@ -65,6 +67,12 @@
 
 			function draw() {
 
+				context.globalCompositeOperation = 'destination-over';
+				context.clearRect(0, 0, floorWidth, floorHeight);
+				// clear canvas
+
+				//ctx.save();
+
 				// music and timing
 				var barEndsTime = bar * barTime;
 				var timeLeft = barEndsTime - time;
@@ -76,12 +84,12 @@
 				for (var i = 0; i < dancers.length; i++) {
 
 					// clear the original
-					context.fillStyle = "white";
-					context.fillRect(dancers[i].pixelPosition.x, dancers[i].pixelPosition.y, 64, 64);
-					
+					//context.fillStyle = "white";
+					//context.fillRect(dancers[i].pixelPosition.x, dancers[i].pixelPosition.y, 64, 64);
+
 					var offset = {
-						x: dancers[i].startingPosition.x * xPixels - 32 ,
-						y: dancers[i].startingPosition.y * yPixels - 32
+						x : dancers[i].startingPosition.x * xPixels - 32,
+						y : dancers[i].startingPosition.y * yPixels - 32
 					};
 
 					// relative (to the starting position) new position
@@ -92,7 +100,7 @@
 						vectX : (destX * xPixels) + offset.x - dancers[i].pixelPosition.x,
 						vectY : (destY * yPixels) + offset.y - dancers[i].pixelPosition.y
 					};
-					
+
 					dancers[i].pixelPosition.x = dancers[i].pixelPosition.x + (distanceLeft.vectX / numberOfMoves);
 					dancers[i].pixelPosition.y = dancers[i].pixelPosition.y + (distanceLeft.vectY / numberOfMoves);
 					context.drawImage(dancers[i].image, dancers[i].pixelPosition.x, dancers[i].pixelPosition.y);

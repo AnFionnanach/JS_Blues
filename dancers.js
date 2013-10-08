@@ -90,49 +90,50 @@ function dancer() {
 var firstMan = new dancer();
 firstMan.role = roles['firstMan'];
 firstMan.gender = gender.male;
-firstMan.image = dancerMan;
+firstMan.image = dancer_m1;
+console.log("dancer m1 - imagesLoaded: " + imagesLoaded);
 firstMan.startingPosition = firstMan.currentPosition = relativePositions['firstMan'];
 
 var firstLady = new dancer();
 firstLady.role = roles['firstLady'];
 firstLady.gender = gender.female;
-firstLady.image = dancerLady;
+firstLady.image = dancer_l1;
 firstLady.startingPosition = firstLady.currentPosition = relativePositions['firstLady'];
 
 var secondMan = new dancer();
 secondMan.role = roles['secondMan'];
 secondMan.gender = gender.male;
-secondMan.image = dancerMan;
+secondMan.image = dancer_m2;
 secondMan.startingPosition = secondMan.currentPosition = relativePositions['secondMan'];
 
 var secondLady = new dancer();
 secondLady.role = roles['secondLady'];
 secondLady.gender = gender.female;
-secondLady.image = dancerLady;
+secondLady.image = dancer_l2;
 secondLady.startingPosition = secondLady.currentPosition = relativePositions['secondLady'];
 
 var thirdMan = new dancer();
 thirdMan.role = roles['thirdMan'];
 thirdMan.gender = gender.male;
-thirdMan.image = dancerMan;
+thirdMan.image = dancer_m3;
 thirdMan.startingPosition = thirdMan.currentPosition = relativePositions['thirdMan'];
 
 var thirdLady = new dancer();
 thirdLady.role = roles['thirdLady'];
 thirdLady.gender = gender.female;
-thirdLady.image = dancerLady;
+thirdLady.image = dancer_l3;
 thirdLady.startingPosition = thirdLady.currentPosition = relativePositions['thirdLady'];
 
 var fourthMan = new dancer();
 fourthMan.role = roles['fourthMan'];
 fourthMan.gender = gender.male;
-fourthMan.image = dancerMan;
+fourthMan.image = dancer_m4;
 fourthMan.startingPosition = fourthMan.currentPosition = relativePositions['fourthMan'];
 
 var fourthLady = new dancer();
 fourthLady.role = roles['fourthLady'];
 fourthLady.gender = gender.female;
-fourthLady.image = dancerLady;
+fourthLady.image = dancer_l4;
 fourthLady.startingPosition = fourthLady.currentPosition = relativePositions['fourthLady'];
 
 var dancers = [firstMan, firstLady, secondMan, secondLady, thirdMan, thirdLady, fourthMan, fourthLady];

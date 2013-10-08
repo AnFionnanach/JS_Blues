@@ -11,4 +11,3 @@ function basicDance() {
 				fourthLady: {}};
 }
 
-var figureOf8 = new figureOfEight();

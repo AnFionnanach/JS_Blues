@@ -10,8 +10,8 @@ function figureOfEight() {
 		y : 0
 	};
 	firstManPosition[4] = {
-		x : 2,
-		y : 2
+		x : 1,
+		y : 1
 	};
 	firstManPosition[8] = {
 		x : 4,
@@ -26,8 +26,8 @@ function figureOfEight() {
 		y : 1
 	};
 	firstManPosition[20] = {
-		x : 2,
-		y : 2
+		x : 3,
+		y : 1
 	};
 	firstManPosition[24] = {
 		x : 0,
