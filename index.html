@@ -9,12 +9,16 @@
 				border: 1px solid black
 			}
 		</style>
-		
-		<script src="imagePreloader.js"></script>
-		<script src="loadImages.js"></script>
+
+		<script src="images/imagePreloader.js"></script>
+		<script src="images/loadImages.js"></script>
 		<script src="dancers.js"></script>
-		<script src="figureOfEight.js"></script>
-		<script src="rightsAndLefts.js"></script>
+		<script src="figures/Figure.js"></script>
+		<script src="figures/figureOfEight.js"></script>
+		<script src="figures/rightsAndLefts.js"></script>
+		<script src="figures/circle.js"></script>
+		<script src="dances/Dance.js"></script>
+		<script src="dances/basicDance.js"></script>
 
 		<script>
 			// floor size
@@ -23,14 +27,16 @@
 			var xPixels;
 			var yPixels;
 
-			var barTime = 2000;
+			var barTime = 1000;
 			//one bar takes 5 seconds
 			var bar = 1;
 			var time = 0;
 			var interval = 100;
 			var steps = barTime / interval;
 
-			var figureOf8 = new figureOfEight();
+			//var figureOf8 = new rightsAndLefts();
+			//var figureOf8 = circle;
+			var dance = basicDance;
 
 			function init() {
 
@@ -39,7 +45,7 @@
 				floorHeight = danceFloor.height;
 
 				context = danceFloor.getContext('2d');
-				drawSet();
+				//drawSet();
 				heartBeat();
 			}
 
@@ -47,19 +53,21 @@
 				xPixels = Math.floor(floorWidth / grid.x);
 				yPixels = Math.floor(floorHeight / grid.y);
 				for (var i = 0; i < dancers.length; i++) {
-					dancers[i].pixelPosition.x = dancers[i].startingPosition.x * xPixels - 32;
-					dancers[i].pixelPosition.y = dancers[i].startingPosition.y * yPixels - 32;
+					dancers[i].pixelPosition.x = dancers[i].startingPosition.x * xPixels - 16;
+					dancers[i].pixelPosition.y = dancers[i].startingPosition.y * yPixels - 16;
 					context.drawImage(dancers[i].image, dancers[i].pixelPosition.x, dancers[i].pixelPosition.y);
 				}
 
 			}
 
 			function heartBeat() {
-				time = time + interval;
-				if ((time % barTime) === 0) {
-					bar = bar + 1;
-				}
-				draw();
+				if (imagesLoaded) {
+					time = time + interval;
+					if ((time % barTime) === 0) {
+						bar = bar + 1;
+					}
+					draw();
+				};
 				setTimeout(function() {
 					heartBeat();
 				}, interval);
@@ -79,22 +87,18 @@
 				var numberOfMoves = timeLeft / interval;
 
 				// redraw each of the dancers
-				xPixels = Math.floor(floorWidth / grid.x);
+				xPixels = Math.floor((floorWidth - 200) / grid.x);
 				yPixels = Math.floor(floorHeight / grid.y);
 				for (var i = 0; i < dancers.length; i++) {
 
-					// clear the original
-					//context.fillStyle = "white";
-					//context.fillRect(dancers[i].pixelPosition.x, dancers[i].pixelPosition.y, 64, 64);
-
 					var offset = {
-						x : dancers[i].startingPosition.x * xPixels - 32,
-						y : dancers[i].startingPosition.y * yPixels - 32
+						x : dancers[i].startingPosition.x * xPixels - 16,
+						y : dancers[i].startingPosition.y * yPixels - 16
 					};
 
 					// relative (to the starting position) new position
-					var destX = figureOf8.whereShouldIBe(dancers[i].role, bar % 8).x;
-					var destY = figureOf8.whereShouldIBe(dancers[i].role, bar % 8).y;
+					var destX = basicDance.whereShouldIBe(dancers[i].role, bar % 16).x;
+					var destY = basicDance.whereShouldIBe(dancers[i].role, bar % 16).y;
 
 					var distanceLeft = {
 						vectX : (destX * xPixels) + offset.x - dancers[i].pixelPosition.x,
@@ -114,7 +118,7 @@
 
 	<body onLoad="init();">
 		<div>
-			<canvas id="danceFloor" width="400" height="600"></canvas>
+			<canvas id="danceFloor" width="600" height="600"></canvas>
 		</div>
 		<div  id="bar"></div>
 	</body>

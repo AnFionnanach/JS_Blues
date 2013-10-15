@@ -1,61 +1,57 @@
-function figure() {
+function Figure() {
 
-	var numberOfBars = 8;
-	var numberOfBeats = numberOfBars * 4;
-
-	this.firstMan;
-	this.firstLady;
-	this.secondMan;
-	this.secondLady;
-	this.thirdMan;
-	this.thirdLady;
-	this.fourthMan;
-	this.fourthLady;
-	this.figure;
+	this.firstManPosition = [];
+	this.firstLadyPosition = [];
+	this.secondManPosition = [];
+	this.secondLadyPosition = [];
+	this.thirdManPosition = [];
+	this.thirdLadyPosition = [];
+	this.fourthManPosition = [];
+	this.fourthLadyPosition = [];
+	this.figure = [];
 }
 
-figure.prototype.follow = function(path, gap) {
-	var newPath;
+Figure.prototype.follow = function(path, gap, beats) {
+	var newPath = [];
 	var pathLength = path.length;
-	for (var i = 0; i < pathLength; i++) {
-		newPath = path[(i + gap) % pathLength];
+	for (var i = 0; i < pathLength; i = i + beats) {
+		newPath[i] = path[(i + (gap * beats)) % (pathLength - 1)];
 	};
 	return newPath;
 };
 
-figure.prototype.mirrorVertically = function(path) {
-	var newPath;
-	for (var i = 0; i < path.length; i++) {
-		newPath[i].x = -path[i].x;
-		newPath[i].y = path[i].y;
+Figure.prototype.mirrorVertically = function(path, beats) {
+	var newPath = [];
+	for (var i = 0; i < path.length; i = i + beats) {
+		newPath[i] = {x: -path[i].x, y: path[i].y};
 	};
 	return newPath;
 };
 
-figure.prototype.mirrorHorizontally = function(path) {
-	var newPath;
-	for (var i = 0; i < path.length; i++) {
+Figure.prototype.mirrorHorizontally = function(path, beats) {
+	var newPath = [];
+	for (var i = 0; i < path.length; i = i + beats) {
 		newPath[i].x = path[i].x;
 		newPath[i].y = -path[i].y;
 	};
 	return newPath;
 };
 
-figure.prototype.parallel = function(path) {
+Figure.prototype.parallel = function(path) {
 	var newPath = path;
 	return newPath;
 };
 
-figure.prototype.oppositeDirection = function(path) {
-	var newPath;
+Figure.prototype.oppositeDirection = function(path, beats) {
+	var newPath = [];
 	for (var i = 0; i < path.length; i++) {
-		newPath[i].x = -path[i].x;
-		newPath[i].y = -path[i].y;
+		newPath[i * beats].x = -path[i * beats].x;
+		newPath[i * beats].y = -path[i * beats].y;
 	};
 	return newPath;
 };
 
-figure.prototype.whereShouldIBe = function(role, bar, beat) {
+Figure.prototype.whereShouldIBe = function(role, bar, beat) {
 
 	if (beat === undefined)
 		beat = bar * 4;
