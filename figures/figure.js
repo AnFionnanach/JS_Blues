@@ -31,8 +31,7 @@ Figure.prototype.mirrorVertically = function(path, beats) {
 Figure.prototype.mirrorHorizontally = function(path, beats) {
 	var newPath = [];
 	for (var i = 0; i < path.length; i = i + beats) {
-		newPath[i].x = path[i].x;
-		newPath[i].y = -path[i].y;
+        newPath[i] = {x: path[i].x, y: -path[i].y};
 	};
 	return newPath;
 };
@@ -45,8 +44,7 @@ Figure.prototype.parallel = function(path) {
 Figure.prototype.oppositeDirection = function(path, beats) {
 	var newPath = [];
 	for (var i = 0; i < path.length; i++) {
-		newPath[i * beats].x = -path[i * beats].x;
-		newPath[i * beats].y = -path[i * beats].y;
+        newPath[i] = {x: -path[i].x, y: path[i].y};
 	};
 	return newPath;
 };
