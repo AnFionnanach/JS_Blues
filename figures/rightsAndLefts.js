@@ -121,6 +121,7 @@ rightsAndLefts.secondManPosition[32] = {
 	y : 0
 };
 
+
 // starts where he's standing
 rightsAndLefts.secondLadyPosition[0] = {
 	x : 0,
