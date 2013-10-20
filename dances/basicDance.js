@@ -1,13 +1,54 @@
-function basicDance() {
-	var dance = new Array;
-	
-	dance[0] = {firstMan: {figure: "figureOfEight", role: "firstMan"},
-				firstLady: {figure: "figureOfEight", role: "firstLady"},
-				secondMan: {},
-				secondLady: {},
-				thirdMan: {},
-				thirdLady: {},
-				fourthMan: {},
-				fourthLady: {}};
-}
+var basicDance = new Dance();
 
+basicDance.figureOfEight = [
+	{
+		figure : figureOfEight,
+		role : roles["firstMan"]
+	},
+	{
+		figure : figureOfEight,
+		role : roles["firstLady"]
+	}
+];
+
+basicDance.leadDownAndUp = [
+    {
+        figure : leadDownAndUp,
+        role : roles["firstMan"]
+    },
+    {
+        figure : leadDownAndUp,
+        role : roles["firstLady"]
+    }
+];
+
+basicDance.rightsAndLefts = [
+	{
+		figure : rightsAndLefts,
+		role : roles["firstMan"]
+	},
+	{
+		figure : rightsAndLefts,
+		role : roles["firstLady"]
+	},
+	{
+		figure : rightsAndLefts,
+		role : roles["secondMan"]
+	},
+	{
+		figure : rightsAndLefts,
+		role : roles["secondLady"]
+	}
+];
+
+for (var i = 1; i < 9; i++) {
+    basicDance.danceFigures[i] = basicDance.leadDownAndUp;
+};
+
+for (var i = 9; i < 17; i++) {
+	basicDance.danceFigures[i] = basicDance.figureOfEight;
+};
+
+for (var i = 17; i < 25; i++) {
+    basicDance.danceFigures[i] = basicDance.rightsAndLefts;
+};

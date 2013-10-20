@@ -1,107 +1,85 @@
-function figureOfEight() {
+var figureOfEight = new Figure();
 
-	var numberOfBars = 8;
-	var numberOfBeats = numberOfBars * 4;
+// starts where he's standing
+figureOfEight.firstManPosition[0] = {
+	x : 0,
+	y : 0
+};
+figureOfEight.firstManPosition[4] = {
+	x : 1,
+	y : 1
+};
+figureOfEight.firstManPosition[8] = {
+	x : 4,
+	y : 3
+};
+figureOfEight.firstManPosition[12] = {
+	x : 5,
+	y : 2
+};
+figureOfEight.firstManPosition[16] = {
+	x : 4,
+	y : 1
+};
+figureOfEight.firstManPosition[20] = {
+	x : 3,
+	y : 1
+};
+figureOfEight.firstManPosition[24] = {
+	x : 0,
+	y : 3
+};
+figureOfEight.firstManPosition[28] = {
+	x : -1,
+	y : 2
+};
 
-	var firstManPosition = new Array;
-	// starts where he's standing
-	firstManPosition[0] = {
-		x : 0,
-		y : 0
-	};
-	firstManPosition[4] = {
-		x : 1,
-		y : 1
-	};
-	firstManPosition[8] = {
-		x : 4,
-		y : 3
-	};
-	firstManPosition[12] = {
-		x : 5,
-		y : 2
-	};
-	firstManPosition[16] = {
-		x : 4,
-		y : 1
-	};
-	firstManPosition[20] = {
-		x : 3,
-		y : 1
-	};
-	firstManPosition[24] = {
-		x : 0,
-		y : 3
-	};
-	firstManPosition[28] = {
-		x : -1,
-		y : 2
-	};
+// finishes back in place
+figureOfEight.firstManPosition[32] = {
+	x : 0,
+	y : 0
+};
 
-	// finishes back in place
-	firstManPosition[32] = {
-		x : 0,
-		y : 0
-	};
 
-	var firstLadyPosition = new Array;
-	// starts where he's standing
-	firstLadyPosition[0] = {
-		x : 0,
-		y : 0
-	};
-	firstLadyPosition[4] = {
-		x : -2,
-		y : 2
-	};
-	firstLadyPosition[8] = {
-		x : -4,
-		y : 3
-	};
-	firstLadyPosition[12] = {
-		x : -5,
-		y : 2
-	};
-	firstLadyPosition[16] = {
-		x : -4,
-		y : 1
-	};
-	firstLadyPosition[20] = {
-		x : -2,
-		y : 2
-	};
-	firstLadyPosition[24] = {
-		x : 0,
-		y : 3
-	};
-	firstLadyPosition[28] = {
-		x : 1,
-		y : 2
-	};
 
-	// finishes back in place
-	firstLadyPosition[32] = {
-		x : 0,
-		y : 0
-	};
+// starts where he's standing
+figureOfEight.firstLadyPosition[0] = {
+	x : 0,
+	y : 0
+};
+figureOfEight.firstLadyPosition[4] = {
+	x : -2,
+	y : 2
+};
+figureOfEight.firstLadyPosition[8] = {
+	x : -4,
+	y : 3
+};
+figureOfEight.firstLadyPosition[12] = {
+	x : -5,
+	y : 2
+};
+figureOfEight.firstLadyPosition[16] = {
+	x : -4,
+	y : 1
+};
+figureOfEight.firstLadyPosition[20] = {
+	x : -2,
+	y : 2
+};
+figureOfEight.firstLadyPosition[24] = {
+	x : 0,
+	y : 3
+};
+figureOfEight.firstLadyPosition[28] = {
+	x : 1,
+	y : 2
+};
 
-	this.figure = [
-		firstManPosition,
-		firstLadyPosition
-	];
+// finishes back in place
+figureOfEight.firstLadyPosition[32] = {
+	x : 0,
+	y : 0
+};
 
-}
-
-figureOfEight.prototype.whereShouldIBe = function(role, bar, beat) {
-
-	if (beat === undefined)
-		beat = bar * 4;
-
-	if (this.figure[role] === undefined)
-		return {
-			x : 0,
-			y : 0
-		};
-
-	return this.figure[role][beat];
-}; 
+figureOfEight.figure = [figureOfEight.firstManPosition, figureOfEight.firstLadyPosition];

@@ -16,6 +16,7 @@
 		<script src="figures/Figure.js"></script>
 		<script src="figures/figureOfEight.js"></script>
 		<script src="figures/rightsAndLefts.js"></script>
+		<script src="figures/leadDownAndUp.js"></script>
 		<script src="figures/circle.js"></script>
 		<script src="dances/Dance.js"></script>
 		<script src="dances/basicDance.js"></script>
@@ -97,8 +98,8 @@
 					};
 
 					// relative (to the starting position) new position
-					var destX = basicDance.whereShouldIBe(dancers[i].role, bar % 16).x;
-					var destY = basicDance.whereShouldIBe(dancers[i].role, bar % 16).y;
+					var destX = basicDance.whereShouldIBe(dancers[i].role, bar % 24).x;
+					var destY = basicDance.whereShouldIBe(dancers[i].role, bar % 24).y;
 
 					var distanceLeft = {
 						vectX : (destX * xPixels) + offset.x - dancers[i].pixelPosition.x,
@@ -118,7 +119,7 @@
 
 	<body onLoad="init();">
 		<div>
-			<canvas id="danceFloor" width="600" height="600"></canvas>
+			<canvas id="danceFloor" width="600" height="400"></canvas>
 		</div>
 		<div  id="bar"></div>
 	</body>

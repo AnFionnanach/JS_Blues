@@ -51,7 +51,7 @@ var relativePositions = {
 
 var grid = {
 	x : 10,
-	y : 10
+	y : 12
 };
 
 function fullName(given, nick, family) {
@@ -91,7 +91,6 @@ var firstMan = new dancer();
 firstMan.role = roles['firstMan'];
 firstMan.gender = gender.male;
 firstMan.image = dancer_m1;
-console.log("dancer m1 - imagesLoaded: " + imagesLoaded);
 firstMan.startingPosition = firstMan.currentPosition = relativePositions['firstMan'];
 
 var firstLady = new dancer();
