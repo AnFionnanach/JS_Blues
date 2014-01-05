@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Crazy Canvas</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		<style>
+			canvas {
+				border: 1px solid black
+			}
+		</style>
+
+		<script src="images/imagePreloader.js"></script>
+		<script src="images/loadImages.js"></script>
+		<script src="dancers.js"></script>
+		<script src="figures/Figure.js"></script>
+		<script src="figures/testcircle.js"></script>
+
+		<script>
+			// floor size
+			var floorWidth;
+			var floorHeight;
+			var xPixels;
+			var yPixels;
+
+			var barTime = 1000;
+			//one bar takes 5 seconds
+			var bar = 1;
+			var time = 0;
+			var interval = 100;
+			var steps = barTime / interval;
+
+			var figure = circle;
+
+			function init() {
+
+				danceFloor = document.getElementById('danceFloor');
+				floorWidth = danceFloor.width;
+				floorHeight = danceFloor.height;
+
+				context = danceFloor.getContext('2d');
+				heartBeat();
+			}
+
+			function heartBeat() {
+				if (imagesLoaded) {
+					time = time + interval;
+					if ((time % barTime) === 0) {
+						bar = bar + 1;
+					}
+					draw();
+				};
+				setTimeout(function() {
+										heartBeat();
+										}, interval);
+			}
+
+			function draw() {
+
+				context.globalCompositeOperation = 'destination-over';
+				context.clearRect(0, 0, floorWidth, floorHeight);
+				// clear canvas
+
+				//ctx.save();
+
+				// music and timing
+				var barEndsTime = bar * barTime;
+				var timeLeft = barEndsTime - time;
+				var numberOfMoves = timeLeft / interval;
+
+				// redraw each of the dancers
+				//xPixels = Math.floor((floorWidth - 200) / grid.x);
+				//yPixels = Math.floor(floorHeight / grid.y);
+				
+				console.log("Bar: " + bar);
+				
+				
+				for (var i = 0; i < dancers.length; i++) {
+
+					//var offset = {
+					//	x : dancers[i].startingPosition.x * xPixels - 16,
+					//	y : dancers[i].startingPosition.y * yPixels - 16
+					//};
+					
+					figureBar = bar % 9;
+					if (figureBar == 0) figureBar = 1;
+
+					// relative (to the starting position) new position
+					var destX = whereShouldIBe(figure, dancers[i].role, figureBar).x;
+					var destY = whereShouldIBe(figure, dancers[i].role, figureBar).y;
+
+					var distanceLeft = {
+						vectX : destX - dancers[i].pixelPosition.x,
+						vectY : destY - dancers[i].pixelPosition.y
+					};
+
+					dancers[i].pixelPosition.x = dancers[i].pixelPosition.x + (distanceLeft.vectX / numberOfMoves);
+					dancers[i].pixelPosition.y = dancers[i].pixelPosition.y + (distanceLeft.vectY / numberOfMoves);
+					context.drawImage(dancers[i].image, dancers[i].pixelPosition.x, dancers[i].pixelPosition.y);
+				}
+
+				document.getElementById("bar").innerHTML = "Bar: " + bar + " Time: " + time / 1000 + " seconds";
+			}
+
+		</script>
+	</head>
+
+	<body onLoad="init();">
+		<div>
+			<canvas id="danceFloor" width="600" height="600"></canvas>
+		</div>
+		<div  id="bar"></div>
+	</body>
+</html>
