@@ -1,5 +1,6 @@
 var basicDance = new Dance();
 
+// dances need to specify which couple is dancing which figure
 basicDance.figureOfEight = [
 	{
 		figure : figureOfEight,

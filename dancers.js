@@ -1,8 +1,10 @@
+// gender of the dancer
 var gender = {
 	male : 0,
 	female : 1
 };
 
+// basic enum for the dancer indices
 var roles = {
 	'firstMan' : 0,
 	'firstLady' : 1,

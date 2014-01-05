@@ -15,7 +15,7 @@ Dance.prototype.whereShouldIBe = function(role, bar, beat) {
 			y : 0
 		};
 
-	// find out which figure is being danced by which the person
+	// find out which figure is being danced by the person
 	var figure = this.danceFigures[bar][role].figure;
 
 	var roleInTheFigure = this.danceFigures[bar][role].role;
