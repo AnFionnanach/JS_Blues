@@ -37,7 +37,7 @@ circle[4][6] = {x: 120, y: 570};
 circle[4][7] = {x: 300, y: 570};
 circle[5] = [];
 circle[5][0] = {x: 300, y: 330};
-circle[5][1] = {x: 210, y: 410};
+circle[5][1] = {x: 210, y: 440};
 circle[5][2] = {x: 300, y: 170};
 circle[5][3] = {x: 120, y: 330};
 circle[5][4] = {x: 210, y: 60};
@@ -71,6 +71,7 @@ circle[8][4] = {x: 120, y: 410};
 circle[8][5] = {x: 300, y: 410};
 circle[8][6] = {x: 120, y: 570};
 circle[8][7] = {x: 300, y: 570};
+
 
 function whereShouldIBe(figure, role, bar, beat) {
 

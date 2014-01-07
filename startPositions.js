@@ -1,0 +1,10 @@
+var startPositions = [];
+startPositions = [];
+startPositions[0] = {x: 120, y: 90};
+startPositions[1] = {x: 300, y: 90};
+startPositions[2] = {x: 120, y: 250};
+startPositions[3] = {x: 300, y: 250};
+startPositions[4] = {x: 120, y: 410};
+startPositions[5] = {x: 300, y: 410};
+startPositions[6] = {x: 120, y: 570};
+startPositions[7] = {x: 300, y: 570};

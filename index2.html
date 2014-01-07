@@ -13,94 +13,97 @@
 		<script src="images/imagePreloader.js"></script>
 		<script src="images/loadImages.js"></script>
 		<script src="dancers.js"></script>
+		<script src="startPositions.js"></script>
 		<script src="figures/Figure.js"></script>
 		<script src="figures/testcircle.js"></script>
+		<script src="figures/leadDownNup.js"></script>
+		<script src="figures/allemand.js"></script>
+		<script src="figures/test8.js"></script>
+		<script src="dances/testDance.js"></script>
 
 		<script>
-			// floor size
-			var floorWidth;
-			var floorHeight;
-			var xPixels;
-			var yPixels;
+            // floor size
+            var floorWidth;
+            var floorHeight;
+            var xPixels;
+            var yPixels;
 
-			var barTime = 1000;
-			//one bar takes 5 seconds
-			var bar = 1;
-			var time = 0;
-			var interval = 100;
-			var steps = barTime / interval;
+            var barTime = 1000;
+            //one bar takes 5 seconds
+            var bar = 1;
+            var time = 0;
+            var interval = 100;
+            var steps = barTime / interval;
 
-			var figure = circle;
+            var dance = dukeOfPerth;
 
-			function init() {
+            function init() {
 
-				danceFloor = document.getElementById('danceFloor');
-				floorWidth = danceFloor.width;
-				floorHeight = danceFloor.height;
+                danceFloor = document.getElementById('danceFloor');
+                floorWidth = danceFloor.width;
+                floorHeight = danceFloor.height;
 
-				context = danceFloor.getContext('2d');
-				heartBeat();
-			}
+                context = danceFloor.getContext('2d');
 
-			function heartBeat() {
-				if (imagesLoaded) {
-					time = time + interval;
-					if ((time % barTime) === 0) {
-						bar = bar + 1;
-					}
-					draw();
-				};
-				setTimeout(function() {
-										heartBeat();
-										}, interval);
-			}
+                for (var i = 0; i < 8; i++) {
+                    dancers[i].pixelPosition.x = startPositions[i].x;
+                    dancers[i].pixelPosition.y = startPositions[i].y;
+                    context.drawImage(dancers[i].image, dancers[i].pixelPosition.x, dancers[i].pixelPosition.y);
 
-			function draw() {
+                }
 
-				context.globalCompositeOperation = 'destination-over';
-				context.clearRect(0, 0, floorWidth, floorHeight);
-				// clear canvas
+                heartBeat();
+            }
 
-				//ctx.save();
+            function heartBeat() {
+                if (imagesLoaded) {
+                    time = time + interval;
+                    if ((time % barTime) === 0) {
+                        bar = bar + 1;
+                    }
+                    draw();
+                };
+                setTimeout(function() {
+                    heartBeat();
+                }, interval);
+            }
 
-				// music and timing
-				var barEndsTime = bar * barTime;
-				var timeLeft = barEndsTime - time;
-				var numberOfMoves = timeLeft / interval;
+            function draw() {
 
-				// redraw each of the dancers
-				//xPixels = Math.floor((floorWidth - 200) / grid.x);
-				//yPixels = Math.floor(floorHeight / grid.y);
-				
-				console.log("Bar: " + bar);
-				
-				
-				for (var i = 0; i < dancers.length; i++) {
+                context.globalCompositeOperation = 'destination-over';
+                context.clearRect(0, 0, floorWidth, floorHeight);
+                // clear canvas
 
-					//var offset = {
-					//	x : dancers[i].startingPosition.x * xPixels - 16,
-					//	y : dancers[i].startingPosition.y * yPixels - 16
-					//};
-					
-					figureBar = bar % 9;
-					if (figureBar == 0) figureBar = 1;
+                //ctx.save();
 
-					// relative (to the starting position) new position
-					var destX = whereShouldIBe(figure, dancers[i].role, figureBar).x;
-					var destY = whereShouldIBe(figure, dancers[i].role, figureBar).y;
+                // music and timing
+                var barEndsTime = bar * barTime;
+                var timeLeft = barEndsTime - time;
+                var numberOfMoves = timeLeft / interval;
 
-					var distanceLeft = {
-						vectX : destX - dancers[i].pixelPosition.x,
-						vectY : destY - dancers[i].pixelPosition.y
-					};
+                console.log("Bar: " + bar);
 
-					dancers[i].pixelPosition.x = dancers[i].pixelPosition.x + (distanceLeft.vectX / numberOfMoves);
-					dancers[i].pixelPosition.y = dancers[i].pixelPosition.y + (distanceLeft.vectY / numberOfMoves);
-					context.drawImage(dancers[i].image, dancers[i].pixelPosition.x, dancers[i].pixelPosition.y);
-				}
+                for (var i = 0; i < dancers.length; i++) {
 
-				document.getElementById("bar").innerHTML = "Bar: " + bar + " Time: " + time / 1000 + " seconds";
-			}
+                    // relative (to the starting position) new position
+                    var destX = whereShouldIBeDance(dance, dancers[i].role, bar - 1).x;
+                    var destY = whereShouldIBeDance(dance, dancers[i].role, bar - 1).y;
+
+                    // if x == 0 then the dancer doesn't move
+                    if (destX != 0) {
+                        var distanceLeft = {
+                            vectX : destX - dancers[i].pixelPosition.x,
+                            vectY : destY - dancers[i].pixelPosition.y
+                        };
+
+                        dancers[i].pixelPosition.x = dancers[i].pixelPosition.x + (distanceLeft.vectX / numberOfMoves);
+                        dancers[i].pixelPosition.y = dancers[i].pixelPosition.y + (distanceLeft.vectY / numberOfMoves);
+                    }
+                    context.drawImage(dancers[i].image, dancers[i].pixelPosition.x, dancers[i].pixelPosition.y);
+                }
+
+                document.getElementById("bar").innerHTML = "Bar: " + bar + " Time: " + time / 1000 + " seconds";
+            }
 
 		</script>
 	</head>
