@@ -1,0 +1,219 @@
+<html>
+	<head>
+		<title>Touchscreen Time!</title>
+		<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+				text-align: center;
+			}
+
+			canvas {
+				outline: 0;
+				border: 1px solid #000;
+				margin-left: auto;
+				margin-right: auto;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id='floor'></canvas>
+		<script>
+            var width = 320,
+            //width of the canvas
+            height = 500,
+            //height of the canvas
+
+            c = document.getElementById('floor'),
+            //canvas itself
+
+            ctx = c.getContext('2d');
+            c.width = width;
+            c.height = height;
+
+            var clear = function() {
+                ctx.fillStyle = '#d0e7f9';
+                ctx.beginPath();
+                ctx.rect(0, 0, width, height);
+                ctx.closePath();
+                ctx.fill();
+            };
+
+            var howManyCircles = 10, circles = [];
+
+            for (var i = 0; i < howManyCircles; i++)
+                circles.push([Math.random() * width, Math.random() * height, Math.random() * 100, Math.random() / 2]);
+            //add information about circles into
+            //the 'circles' Array. It is x & y positions,
+            //radius from 0-100 and transparency
+            //from 0-0.5 (0 is invisible, 1 no transparency)
+
+            var DrawCircles = function() {
+                for (var i = 0; i < howManyCircles; i++) {
+                    ctx.fillStyle = 'rgba(255, 255, 255, ' + circles[i][3] + ')';
+                    //white color with transparency in rgba
+                    ctx.beginPath();
+                    ctx.arc(circles[i][0], circles[i][1], circles[i][2], 0, Math.PI * 2, true);
+                    //arc(x, y, radius, startAngle, endAngle, anticlockwise)
+                    //circle has always PI*2 end angle
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            };
+
+            var MoveCircles = function(deltaY) {
+                for (var i = 0; i < howManyCircles; i++) {
+                    if (circles[i][1] - circles[i][2] > height) {
+                        //the circle is under the screen so we change
+                        //informations about it
+                        circles[i][0] = Math.random() * width;
+                        circles[i][2] = Math.random() * 100;
+                        circles[i][1] = 0 - circles[i][2];
+                        circles[i][3] = Math.random() / 2;
+                    } else {
+                        //move circle deltaY pixels down
+                        circles[i][1] += deltaY;
+                    }
+                }
+            };
+
+            var player = new (function(){
+            //create new object based on function and assign
+            //what it returns to the 'player' variable
+
+            var that = this;
+            //'that' will be the context now
+
+            //attributes
+            that.image = new Image();
+            that.image.src = "images/dancer.png";
+            //create new Image and set it's source to the
+            //'angel.png' image I upload above
+
+            that.width = 64;
+            //width of the single frame
+            that.height = 64;
+            //height of the single frame
+
+            that.X = 0;
+            that.Y = 0;
+            //X&Y position
+            that.toX = that.X;
+            that.toY = that.Y;
+            
+            that.speed = 5;
+
+            //methods
+            that.setPosition = function(x, y){
+            that.X = x;
+            that.Y = y;
+            };
+
+            that.draw = function(){
+            try {
+            ctx.drawImage(that.image, 0, 0, that.width, that.height, that.X, that.Y, that.width, that.height);
+            //cutting source image and pasting it into destination one, drawImage(Image Object, source X, source Y, source Width, source Height, destination X (X position), destination Y (Y position), Destination width, Destination height)
+            } catch (e) {
+            //sometimes, if character's image is too big and will not load until the drawing of the first frame, Javascript will throws error and stop executing everything. To avoid this we have to catch an error and retry painting in another frame. It is invisible for the user with 50 frames per second.
+            }
+            };
+            
+            that.moveTo = function(coords){
+            	//that.setPosition(coords.pageX - c.offsetLeft, coords.pageY - c.offsetTop);
+            	that.toX = coords.pageX - c.offsetLeft, that.toY = coords.pageY - c.offsetTop;
+            	var deltaX = toX - that.X, deltaY = toY - that.Y;
+            	var distance = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
+            	var fraction = distance / that.speed;
+            	console.log("x = " + that.X + " y = " + that.Y + " toX = " + toX + " toY = " + toY + " distance = " + distance);
+            	that.setPosition(that.X + (deltaX / fraction), that.Y + ~~(deltaY / fraction));
+            };
+
+            that.moveLeft = function(){
+            if (that.X > 0) {
+            //check whether the object is inside the screen
+            that.setPosition(that.X - 5, that.Y);
+            }
+            };
+
+            that.moveRight = function(){
+            if (that.X + that.width < width) {
+            //check whether the object is inside the screen
+            that.setPosition(that.X + 5, that.Y);
+            }
+            };
+            that.moveUp = function(){
+            if (that.Y > 0) {
+            //check whether the object is inside the screen
+            that.setPosition(that.X, that.Y - 5);
+            }
+            };
+
+            that.moveDown = function(){
+            if (that.Y + that.height < height) {
+            //check whether the object is inside the screen
+            that.setPosition(that.X, that.Y + 5);
+            }
+            };
+
+            })();
+            //we immediately execute the function above and
+            //assign its result to the 'player' variable
+            //as a new object
+
+            player.setPosition(~~((width - player.width) / 2), ~~((height - player.height) / 2));
+            //our character is ready, let's move it
+            //to the center of the screen,
+            //'~~' returns nearest lower integer from
+            //given float, equivalent of Math.floor()
+
+            document.onmousemove = function(e) {
+                if (player.X + c.offsetLeft > e.pageX) {
+                    //if mouse is on the left side of the player.
+                    player.moveLeft();
+                }
+                if (player.X + c.offsetLeft < e.pageX) {
+                    //or on right?
+                    player.moveRight();
+                }
+                if (player.Y + c.offsetTop > e.pageY) {
+                    //if mouse is on the left side of the player.
+                    player.moveUp();
+                }
+                if (player.Y + c.offsetTop < e.pageY) {
+                    //or on right?
+                    player.moveDown();
+                }
+            };
+
+            // listen for touches
+            document.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                // the event object has an array
+                // named touches; we just want
+                // the first touch
+                player.moveTo(e.touches[0]);
+            }, false);
+            document.addEventListener('touchmove', function(e) {
+                // we're not interested in this,
+                // but prevent default behaviour
+                // so the screen doesn't scroll
+                // or zoom
+                e.preventDefault();
+            }, false);
+            document.addEventListener('touchend', function(e) {
+                // as above
+                e.preventDefault();
+            }, false);
+
+            var GameLoop = function() {
+                clear();
+                MoveCircles(5);
+                DrawCircles();
+                player.draw();
+                gLoop = setTimeout(GameLoop, 1000 / 50);
+            };
+            GameLoop();
+
+		</script>
+	</body>
+</html>
