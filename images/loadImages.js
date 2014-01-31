@@ -16,7 +16,7 @@ dancerLady.src = "images/lady_dancer.png";
 
 var imagesLoaded = false;
 
-var dancer_images = ["images/dancer_m1.png", "images/dancer_m2.png", "images/dancer_m3.png", "images/dancer_m4.png", "images/dancer_l1.png", "images/dancer_l2.png", "images/dancer_l3.png", "images/dancer_l4.png"];
+var dancer_images = ["images/transparent.png", "images/dancer_m2.png", "images/dancer_m3.png", "images/dancer_m4.png", "images/dancer_l1.png", "images/dancer_l2.png", "images/dancer_l3.png", "images/dancer_l4.png"];
 
 var dancer_m1, dancer_m2, dancer_m3, dancer_m4, dancer_l1, dancer_l2, dancer_l3, dancer_l4;
 

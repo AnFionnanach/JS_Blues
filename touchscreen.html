@@ -100,8 +100,10 @@
             //X&Y position
             that.toX = that.X;
             that.toY = that.Y;
-            
+
             that.speed = 5;
+            that.path = [];
+            that.pathIndex = -1;
 
             //methods
             that.setPosition = function(x, y){
@@ -117,16 +119,53 @@
             //sometimes, if character's image is too big and will not load until the drawing of the first frame, Javascript will throws error and stop executing everything. To avoid this we have to catch an error and retry painting in another frame. It is invisible for the user with 50 frames per second.
             }
             };
-            
+
             that.moveTo = function(coords){
-            	//that.setPosition(coords.pageX - c.offsetLeft, coords.pageY - c.offsetTop);
-            	that.toX = coords.pageX - c.offsetLeft, that.toY = coords.pageY - c.offsetTop;
-            	var deltaX = toX - that.X, deltaY = toY - that.Y;
-            	var distance = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
-            	var fraction = distance / that.speed;
-            	console.log("x = " + that.X + " y = " + that.Y + " toX = " + toX + " toY = " + toY + " distance = " + distance);
-            	that.setPosition(that.X + (deltaX / fraction), that.Y + ~~(deltaY / fraction));
+            //that.setPosition(coords.pageX - c.offsetLeft, coords.pageY - c.offsetTop);
+            that.toX = coords.pageX - c.offsetLeft, that.toY = coords.pageY - c.offsetTop;
             };
+
+            that.move = function(){
+            // check that there's a path
+            if (that.pathIndex > -1) {
+            // calculate the distance to the next point in the path array
+				while ((that.pathIndex < that.path.length - 1) && (that.distance(that.path[that.pathIndex])) < that.speed) {
+					that.pathIndex++;
+				};
+				that.moveTo(that.path[that.pathIndex]);
+            };
+
+            var deltaX = that.toX - that.X, deltaY = that.toY - that.Y;
+            var distance = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
+            var fraction = distance / that.speed;
+            //console.log("x = " + that.X + " y = " + that.Y + " toX = " + toX + " toY = " + toY + " distance = " + distance);
+            if (distance > that.speed) {
+            that.setPosition(that.X + (deltaX / fraction), that.Y + ~~(deltaY / fraction));
+            };
+            };
+
+            that.distance = function(coords) {
+            that.toX = coords.pageX - c.offsetLeft, that.toY = coords.pageY - c.offsetTop;
+            var deltaX = that.toX - that.X, deltaY = that.toY - that.Y;
+            var distance = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
+            return distance;
+            };
+
+            that.mapPath = function(touches) {
+            if (that.pathIndex == -1) {
+            that.pathIndex = 0;
+            };
+            that.path.push(touches);
+            console.log("Path length = " + that.path.length);
+            };
+
+            that.mapMoves = function(){
+            ctx.fillStyle = 'red';
+            if (that.pathIndex > -1)
+ {            for (var i = that.pathIndex; i < that.path.length; i++) {
+            ctx.fillRect(that.path[i].pageX - c.offsetLeft, that.path[i].pageY - c.offsetTop, 5, 5);
+            };
+            };};
 
             that.moveLeft = function(){
             if (that.X > 0) {
@@ -166,7 +205,7 @@
             //'~~' returns nearest lower integer from
             //given float, equivalent of Math.floor()
 
-            document.onmousemove = function(e) {
+            c.onmousemove = function(e) {
                 if (player.X + c.offsetLeft > e.pageX) {
                     //if mouse is on the left side of the player.
                     player.moveLeft();
@@ -186,29 +225,34 @@
             };
 
             // listen for touches
-            document.addEventListener('touchstart', function(e) {
+            c.addEventListener('touchstart', function(e) {
                 e.preventDefault();
                 // the event object has an array
                 // named touches; we just want
                 // the first touch
-                player.moveTo(e.touches[0]);
+                //player.moveTo(e.touches[0]);
             }, false);
-            document.addEventListener('touchmove', function(e) {
+            c.addEventListener('touchmove', function(e) {
                 // we're not interested in this,
                 // but prevent default behaviour
                 // so the screen doesn't scroll
                 // or zoom
+                player.mapPath(e.touches[0]);
                 e.preventDefault();
             }, false);
-            document.addEventListener('touchend', function(e) {
+            c.addEventListener('touchend', function(e) {
                 // as above
                 e.preventDefault();
+                //player.mapPath(e.touches);
+                //console.log("End: " + e.touches.length);
             }, false);
 
             var GameLoop = function() {
                 clear();
                 MoveCircles(5);
                 DrawCircles();
+                player.move();
+                player.mapMoves();
                 player.draw();
                 gLoop = setTimeout(GameLoop, 1000 / 50);
             };
