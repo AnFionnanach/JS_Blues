@@ -20,9 +20,11 @@
 		<script src="figures/allemand.js"></script>
 		<script src="figures/test8.js"></script>
 		<script src="dances/testDance.js"></script>
+		<script src="player.js"></script>
 
 		<script>
             // floor size
+            var danceFloor;
             var floorWidth;
             var floorHeight;
             var xPixels;
@@ -36,6 +38,8 @@
             var steps = barTime / interval;
 
             var dance = dukeOfPerth;
+
+            var player_m1;
 
             function init() {
 
@@ -52,6 +56,41 @@
 
                 }
 
+                player_m1 = new player();
+                player_m1.draw();
+
+                danceFloor.onmousemove = function(e) {
+                    if (player_m1.x + danceFloor.offsetLeft > e.pageX) {
+                        //if mouse is on the left side of the player_m1.
+                        player_m1.moveLeft();
+                    }
+                    if (player_m1.x + danceFloor.offsetLeft < e.pageX) {
+                        //or on right?
+                        player_m1.moveRight();
+                    }
+                    if (player_m1.y + danceFloor.offsetTop > e.pageY) {
+                        //if mouse is on the left side of the player_m1.
+                        player_m1.moveUp();
+                    }
+                    if (player_m1.y + danceFloor.offsetTop < e.pageY) {
+                        //or on right?
+                        player_m1.moveDown();
+                    }
+                };
+
+                // listen for touches
+                danceFloor.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    //player.moveTo(e.touches[0]);
+                }, false);
+                danceFloor.addEventListener('touchmove', function(e) {
+                    player_m1.mapPath(e.touches[0]);
+                    e.preventDefault();
+                }, false);
+                danceFloor.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                }, false);
+
                 heartBeat();
             }
 
@@ -62,6 +101,10 @@
                         bar = bar + 1;
                     }
                     draw();
+                    player_m1.mapMoves();
+                    player_m1.move();
+                    player_m1.draw();
+
                 };
                 setTimeout(function() {
                     heartBeat();
@@ -81,7 +124,7 @@
                 var timeLeft = barEndsTime - time;
                 var numberOfMoves = timeLeft / interval;
 
-                console.log("Bar: " + bar);
+                //                console.log("Bar: " + bar);
 
                 for (var i = 0; i < dancers.length; i++) {
 
